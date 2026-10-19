@@ -1,0 +1,39 @@
+# Guardener configuration for Container Image Suggestions and Container Image
+# Migration.
+#
+# Docs:
+#   https://edu.chainguard.dev/chainguard/guardener/github/configuration/
+#   https://edu.chainguard.dev/chainguard/guardener/github/image-suggestions/
+#   https://edu.chainguard.dev/chainguard/guardener/github/image-migration/
+#
+# Guardener reads this file from the DEFAULT BRANCH only. A pull request that
+# changes it has no effect until it merges.
+
+# Container Image Suggestions: review the images each pull request adds or
+# changes, and comment with the Chainguard replacement.
+enabled: true
+
+# Rank standard images ahead of FIPS variants. Flip this to true (or drop the
+# key, since true is the default) for a federal or FedRAMP conversation.
+prefer_fips: false
+
+# Container Image Migration: replace the images already on the default branch
+# through one maintained pull request.
+migrate:
+  enabled: true
+
+  # How often a scheduled migration runs, as a Go duration. 24h is both the
+  # default and the floor; anything shorter is clamped back up to 24h.
+  period: "24h"
+
+  ignore:
+    files:
+      # Local-only developer image. Nobody ships it, so the churn of a
+      # migration pull request costs more than it saves.
+      - "Dockerfile.dev"
+
+    images:
+      # Matches the reference as written in the file, after Dockerfile ARG
+      # defaults are filled in. Note "busybox:*" does NOT match
+      # "docker.io/library/busybox:1.36" or a bare "busybox" with no tag.
+      - "busybox:*"
