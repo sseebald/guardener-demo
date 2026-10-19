@@ -82,6 +82,7 @@ no shell-form `CMD`/`ENTRYPOINT`, no `ONBUILD`, and no `CMD` without an
 | `apps/09-dotnet-api` | `mcr.microsoft.com/dotnet/{sdk,aspnet}:8.0` | A registry that isn't Docker Hub. |
 | `apps/10-legacy-onbuild` | `node:20-alpine` | `ONBUILD` golden-base pattern. Reported under **Not migrated**. |
 | `apps/11-edge-cases` | `scratch`, digest-pinned `redis`, stage ref, bare `ARG` | Four stages, four documented skip reasons. |
+| `apps/12-worker` | `python:3.12-slim` | Arrives by PR, not on `main`, so it exercises **Suggestions** rather than migration. Deps stage blocked by `RUN`, runtime stage one-click eligible. |
 | `Dockerfile.dev` | `python:3.12-slim` | Excluded by `migrate.ignore.files`. Should never appear in the PR. |
 | `docker-compose.yml` | postgres, redis, rabbitmq, traefik, minio | The Compose path. |
 | `deploy/k8s/` | nginx, fluent-bit, postgres, aws-cli, `busybox:1.36` | Manifests, sidecars, initContainers. The busybox ref is excluded by `migrate.ignore.images`. |
