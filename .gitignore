@@ -1,0 +1,25 @@
+# Build output
+dist/
+target/
+bin/
+obj/
+out/
+*.jar
+
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+tfplan
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

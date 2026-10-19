@@ -1,0 +1,11 @@
+{
+  "name": "demand-forecast",
+  "version": "2026.09.1",
+  "intercept": 12.4,
+  "coefficients": {
+    "trailing_7d_units": 0.82,
+    "promo_active": 34.5,
+    "days_to_holiday": -0.41,
+    "price_index": -6.2
+  }
+}

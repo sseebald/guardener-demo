@@ -1,0 +1,28 @@
+# DEMO FIXTURE. Upstream images on purpose. See README.md.
+#
+# This file is the demonstration target for `migrate.ignore.files` in
+# .chainguard/images.yaml. Guardener reads the rest of the repository but skips
+# this file entirely, so none of the references below ever show up in the
+# migration pull request.
+#
+# The real-world reason to do this: a local-only developer image that nobody
+# ships, where the churn of a migration pull request costs more than it saves.
+
+FROM python:3.12-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        git \
+        jq \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir \
+    httpie==3.2.3 \
+    ipython==8.27.0 \
+    pytest==8.3.3
+
+WORKDIR /workspace
+
+CMD ["bash"]

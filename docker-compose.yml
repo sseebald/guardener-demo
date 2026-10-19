@@ -1,0 +1,63 @@
+# DEMO FIXTURE. Upstream images on purpose. See README.md.
+#
+# Guardener reads literal `image:` values in Compose files, so every pinned
+# image below is in scope for both Image Suggestions and migration.
+
+name: northwind
+
+services:
+  shipments-api:
+    build: ./apps/03-express-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+
+  inventory:
+    build: ./apps/04-go-microservice
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: northwind
+      POSTGRES_PASSWORD: northwind
+      POSTGRES_DB: northwind
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  proxy:
+    image: traefik:v3.1
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  minio:
+    image: minio/minio:RELEASE.2024-09-13T20-26-02Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+volumes:
+  pgdata:

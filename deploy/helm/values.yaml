@@ -1,0 +1,52 @@
+# DEMO FIXTURE. Upstream images on purpose. See ../../README.md.
+#
+# Two different shapes on purpose:
+#
+#   1. `logShipper.image` is one literal string on its own line. Guardener can
+#      read it AND offer a one-click suggested change.
+#
+#   2. `cache.image` is the Helm-style split mapping. Guardener reads
+#      registry/repository/tag and will tell you the replacement, but it cannot
+#      offer a one-click change, because the reference is not a single literal
+#      value on one line.
+#
+# Guardener reads values files as written. It does not render chart templates,
+# so an image assembled inside a template is invisible to it.
+
+replicaCount: 3
+
+logShipper:
+  enabled: true
+  image: fluent/fluent-bit:3.1.9
+
+cache:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/redis
+    tag: "7.4.1"
+    pullPolicy: IfNotPresent
+
+metrics:
+  enabled: true
+  image: prom/prometheus:v2.54.1
+
+grafana:
+  enabled: false
+  image: grafana/grafana:11.2.0
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: northwind.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi

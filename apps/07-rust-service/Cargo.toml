@@ -1,0 +1,13 @@
+[package]
+name = "telemetry"
+version = "0.1.0"
+edition = "2021"
+description = "Telemetry ingest for the Northwind demo stack"
+
+[[bin]]
+name = "telemetry"
+path = "src/main.rs"
+
+[profile.release]
+strip = true
+lto = true

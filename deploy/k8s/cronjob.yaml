@@ -1,0 +1,48 @@
+# DEMO FIXTURE. Upstream images on purpose. See ../../README.md.
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: northwind-nightly-backup
+  namespace: northwind
+spec:
+  schedule: "17 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-dump
+              image: postgres:16-alpine
+              command:
+                - sh
+                - -c
+                - pg_dump -h postgres -U northwind northwind | gzip > /backup/northwind-$(date +%F).sql.gz
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: northwind-db
+                      key: password
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+
+            - name: upload
+              image: amazon/aws-cli:2.17.42
+              command:
+                - sh
+                - -c
+                - aws s3 sync /backup s3://northwind-backups/postgres/
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+
+          volumes:
+            - name: backup
+              emptyDir: {}

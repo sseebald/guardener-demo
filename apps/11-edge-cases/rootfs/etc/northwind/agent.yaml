@@ -1,0 +1,12 @@
+agent:
+  name: northwind-edge-agent
+  listen: 0.0.0.0:7070
+  log_level: info
+
+cache:
+  endpoint: 127.0.0.1:6379
+  config_file: /etc/northwind/redis.conf
+
+upstream:
+  inventory: http://inventory.northwind.svc.cluster.local:8080
+  shipments: http://shipments.northwind.svc.cluster.local:3000

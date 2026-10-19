@@ -1,0 +1,13 @@
+{
+  "name": "northwind-console",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Operator console for the Northwind demo stack",
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
